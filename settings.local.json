@@ -1,4 +1,5 @@
 {
+  "_note": "This is a template. Copy to ~/.claude/settings.local.json and customize permissions for your environment.",
   "permissions": {
     "allow": [
       "mcp__TalkToFigma__join_channel",

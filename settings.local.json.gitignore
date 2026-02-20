@@ -1,0 +1,5 @@
+# Claude Code Config
+
+Sensitive settings that should NOT be committed.
+
+Create `settings.local.json` in your `~/.claude/` directory with your own permissions.
