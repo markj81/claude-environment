@@ -18,8 +18,10 @@
       "Bash(open:*)",
       "Bash(claude plugins:*)",
       "Bash(claude mcp add arc:*)",
-      "WebFetch(domain:www.theluckystrike.co.uk)",
-      "WebFetch(domain:theluckystrike.co.uk)",
+      // Personal domains hidden - add your own
+      // "WebFetch(domain:www.theluckystrike.co.uk)",
+      // "WebFetch(domain:theluckystrike.co.uk)",
+      // "WebFetch(domain:pleras.com)",
       "WebSearch",
       "Bash(git init)",
       "Bash(git add:*)",
@@ -65,11 +67,12 @@
       "Bash(npx skills add:*)",
       "Bash(TOKEN=:*)",
       "Bash(echo:*)",
-      "WebFetch(domain:www.intigriti.com)",
-      "WebFetch(domain:www.yeswehack.com)",
-      "WebFetch(domain:www.bugcrowd.com)",
-      "WebFetch(domain:bugcrowd.com)",
-      "WebFetch(domain:www.hackerone.com)",
+      // Bug bounty domains hidden - add your own
+      // "WebFetch(domain:www.intigriti.com)",
+      // "WebFetch(domain:www.yeswehack.com)",
+      // "WebFetch(domain:www.bugcrowd.com)",
+      // "WebFetch(domain:bugcrowd.com)",
+      // "WebFetch(domain:www.hackerone.com)",
       "mcp__figma__get_screenshot",
       "mcp__figma__get_metadata",
       "Bash(python3:*)",
@@ -79,10 +82,12 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "mcp__figma__generate_diagram",
       "Bash(ln:*)",
-      "WebFetch(domain:pleras.com)",
+      // Personal domains hidden - add your own
+      // "WebFetch(domain:pleras.com)",
       "Bash(zip:*)",
-      "Bash(git -C:*)",
-      "Bash(git -C /Users/markjenkinsmark status)"
+      // Personal path hidden - add your own
+      // "Bash(git -C /Users/markjenkinsmark status)"
+      "Bash(git -C:*)"
     ]
   }
 }
