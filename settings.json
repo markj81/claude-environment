@@ -1,8 +1,38 @@
 {
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "true"
+  },
   "permissions": {
     "allow": [
       "mcp__pencil"
     ]
+  },
+  "model": "opus",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"~/.claude/hooks/gsd-check-update.js\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"~/.claude/hooks/gsd-context-monitor.js\""
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node \"~/.claude/hooks/gsd-statusline.js\""
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
@@ -18,5 +48,6 @@
     "full-stack-orchestration@claude-code-workflows": true,
     "ui-design@claude-code-workflows": true,
     "seo-analysis-monitoring@claude-code-workflows": true
-  }
+  },
+  "skipDangerousModePermissionPrompt": true
 }
