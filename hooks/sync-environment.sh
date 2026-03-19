@@ -35,7 +35,7 @@ for item in "${SYNC_ITEMS[@]}"; do
   fi
 done
 
-# Sync directories — copy real files only (skip broken symlinks, .git dirs)
+# Sync directories — dereference symlinks so plugin-installed content is included
 for dir in "${SYNC_DIRS[@]}"; do
   src="$CLAUDE_DIR/$dir"
   dest="$REPO_DIR/$dir"
@@ -44,25 +44,26 @@ for dir in "${SYNC_DIRS[@]}"; do
     rm -rf "$dest"
     mkdir -p "$dest"
 
-    # Copy skill directories (each contains SKILL.md and possibly data/)
+    # Copy skill directories — follow symlinks (handles plugin-installed skills)
     if [ "$dir" = "skills" ]; then
       for skill_dir in "$src"/*/; do
         skill_name=$(basename "$skill_dir")
-        # Skip if it's a broken symlink
+        # Skip broken symlinks ([ -d ] follows symlinks, so broken ones return false)
         if [ -d "$skill_dir" ]; then
-          # Remove embedded .git dirs before copying
           mkdir -p "$dest/$skill_name"
-          rsync -a --exclude='.git' "$skill_dir" "$dest/$skill_name/" 2>/dev/null || \
-            cp -R "$skill_dir" "$dest/$skill_name/" 2>/dev/null || true
+          # -L dereferences symlinks; --exclude='.git' avoids embedded repos
+          rsync -aL --exclude='.git' "$skill_dir" "$dest/$skill_name/" 2>/dev/null || \
+            cp -rL "$skill_dir" "$dest/$skill_name/" 2>/dev/null || true
         fi
       done
     fi
 
-    # Copy agent files (only real files, not broken symlinks)
+    # Copy agent files — follow symlinks (handles plugin-installed agents)
     if [ "$dir" = "agents" ]; then
       for agent_file in "$src"/*.md; do
-        if [ -f "$agent_file" ] && [ ! -L "$agent_file" ]; then
-          cp "$agent_file" "$dest/"
+        # -f follows symlinks; skip only broken symlinks (where -f returns false)
+        if [ -f "$agent_file" ]; then
+          cp -L "$agent_file" "$dest/"
         fi
       done
     fi
