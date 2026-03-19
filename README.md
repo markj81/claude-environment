@@ -8,10 +8,9 @@ Personal Claude Code configuration including CLAUDE.md instructions, custom skil
 claude-environment/
 ├── CLAUDE.md                # Workflow rules and core principles
 ├── settings.json            # Plugins, hooks, model, env vars
-├── settings.local.json      # Permissions template (customize per machine)
-├── skills/                  # 33 skill modules
+├── settings.local.json      # Permissions (not committed — create your own)
+├── skills/                  # 16 skill modules
 │   ├── accessibility-audit/
-│   ├── accessibility-compliance/
 │   ├── baseline-ui/
 │   ├── design-system-patterns/
 │   ├── documentation-templates/
@@ -21,35 +20,15 @@ claude-environment/
 │   ├── fixing-metadata/
 │   ├── fixing-motion-performance/
 │   ├── frontend-design/
-│   ├── interaction-design/
 │   ├── mark-jenkins/
 │   ├── mo-modals-mo-problems/
-│   ├── mobile-android-design/
-│   ├── mobile-ios-design/
-│   ├── multi-reviewer-patterns/
-│   ├── nextjs-app-router-patterns/
 │   ├── parallel-debugging/
 │   ├── parallel-feature-development/
-│   ├── performance-engineer/
-│   ├── react-native-architecture/
-│   ├── react-state-management/
-│   ├── responsive-design/
-│   ├── tailwind-design-system/
-│   ├── task-coordination-strategies/
-│   ├── team-communication-protocols/
-│   ├── team-composition-patterns/
 │   ├── ui-ux-pro-max/
-│   ├── ux-microcopy-audit/
-│   ├── visual-design-foundations/
-│   ├── wcag-audit-patterns/
-│   └── web-component-design/
-└── agents/                  # 24 custom agents
-    ├── accessibility-expert.md
+│   └── ux-microcopy-audit/
+└── agents/                  # 14 custom agents
     ├── code-improvement-agent.md
-    ├── code-reviewer.md
     ├── content-improvement-agent.md
-    ├── deployment-engineer.md
-    ├── frontend-developer.md
     ├── gsd-codebase-mapper.md
     ├── gsd-debugger.md
     ├── gsd-executor.md
@@ -61,12 +40,6 @@ claude-environment/
     ├── gsd-research-synthesizer.md
     ├── gsd-roadmapper.md
     ├── gsd-verifier.md
-    ├── security-auditor.md
-    ├── team-debugger.md
-    ├── team-implementer.md
-    ├── team-lead.md
-    ├── team-reviewer.md
-    ├── test-automator.md
     └── ux-ui-improvement-reviewer.md
 ```
 
@@ -76,30 +49,28 @@ claude-environment/
 Workflow rules for Claude Code sessions: plan-first approach, subagent strategy, self-improvement loops, verification before done, and core principles (simplicity, no lazy fixes, minimal impact).
 
 ### Settings
-- **settings.json** - Model set to Opus, agent teams enabled, GSD hooks for session start and post-tool-use, 13 enabled plugins
-- **settings.local.json** - Permission template with Figma MCP, Bash, WebFetch, and git allowances (customize with your own domains)
+- **settings.json** — Model set to Opus, agent teams enabled, GSD hooks for session start and post-tool-use, 13 enabled plugins
+- **settings.local.json** — Not committed. Create this file in `~/.claude/` with your own machine-specific permissions (Bash, WebFetch, MCP allowances, etc.)
 
-### Skills (33)
+> **Note:** `settings.json` references hook scripts (`hooks/gsd-check-update.js`, `hooks/sync-environment.sh`, `hooks/gsd-context-monitor.js`, `hooks/gsd-statusline.js`) that are not included in this repo. These are optional — remove or replace the hooks entries if you don't have them.
+
+### Skills (16)
 
 | Category | Skills |
 |----------|--------|
-| **Accessibility** | accessibility-audit, accessibility-compliance, fixing-accessibility, wcag-audit-patterns |
-| **Design & UI** | baseline-ui, design-system-patterns, figma, frontend-design, interaction-design, mo-modals-mo-problems, ui-ux-pro-max, visual-design-foundations |
-| **Mobile** | mobile-android-design, mobile-ios-design, react-native-architecture |
-| **Frontend** | nextjs-app-router-patterns, react-state-management, responsive-design, tailwind-design-system, web-component-design |
+| **Accessibility** | accessibility-audit, fixing-accessibility |
+| **Design & UI** | baseline-ui, design-system-patterns, figma, frontend-design, mo-modals-mo-problems, ui-ux-pro-max |
 | **Content & Docs** | documentation-templates, fixing-metadata, ux-microcopy-audit |
-| **Performance** | fixing-motion-performance, performance-engineer |
-| **Agent Teams** | multi-reviewer-patterns, parallel-debugging, parallel-feature-development, task-coordination-strategies, team-communication-protocols, team-composition-patterns |
+| **Performance** | fixing-motion-performance |
+| **Agent Teams** | parallel-debugging, parallel-feature-development |
 | **Utility** | find-skills, mark-jenkins |
 
-### Agents (24)
+### Agents (14)
 
 | Category | Agents |
 |----------|--------|
-| **Code Quality** | code-improvement-agent, code-reviewer, content-improvement-agent, ux-ui-improvement-reviewer |
-| **Architecture** | frontend-developer, deployment-engineer, security-auditor, accessibility-expert, test-automator |
+| **Code Quality** | code-improvement-agent, content-improvement-agent, ux-ui-improvement-reviewer |
 | **GSD Workflow** | gsd-planner, gsd-executor, gsd-verifier, gsd-debugger, gsd-roadmapper, gsd-codebase-mapper, gsd-phase-researcher, gsd-plan-checker, gsd-project-researcher, gsd-research-synthesizer, gsd-integration-checker |
-| **Agent Teams** | team-lead, team-implementer, team-debugger, team-reviewer |
 
 ## Installation
 
@@ -114,7 +85,9 @@ cp -r skills/ ~/.claude/
 cp -r agents/ ~/.claude/
 ```
 
-After cloning, edit `settings.local.json` with your own domains and paths.
+After cloning, create `~/.claude/settings.local.json` with your own machine-specific permissions.
+
+If you don't have the GSD hook scripts, remove or comment out the `hooks` and `statusLine` entries in `settings.json`.
 
 ## Plugins
 
