@@ -44,26 +44,62 @@ for dir in "${SYNC_DIRS[@]}"; do
     rm -rf "$dest"
     mkdir -p "$dest"
 
-    # Copy skill directories — follow symlinks (handles plugin-installed skills)
+    # Copy skill directories — handle both real dirs and broken plugin symlinks
     if [ "$dir" = "skills" ]; then
-      for skill_dir in "$src"/*/; do
-        skill_name=$(basename "$skill_dir")
-        # Skip broken symlinks ([ -d ] follows symlinks, so broken ones return false)
-        if [ -d "$skill_dir" ]; then
+      # Use ls to get all entries including broken symlinks (glob skips them)
+      while IFS= read -r skill_name; do
+        skill_path="$src/$skill_name"
+        if [ -d "$skill_path" ]; then
+          # Valid directory or resolvable symlink — copy with symlink dereferencing
           mkdir -p "$dest/$skill_name"
-          # -L dereferences symlinks; --exclude='.git' avoids embedded repos
-          rsync -aL --exclude='.git' "$skill_dir" "$dest/$skill_name/" 2>/dev/null || \
-            cp -rL "$skill_dir" "$dest/$skill_name/" 2>/dev/null || true
+          rsync -aL --exclude='.git' "$skill_path/" "$dest/$skill_name/" 2>/dev/null || \
+            cp -rL "$skill_path/" "$dest/$skill_name/" 2>/dev/null || true
+        elif [ -L "$skill_path" ]; then
+          # Broken symlink — resolve target relative to ~/.claude
+          target=$(readlink "$skill_path")
+          normalized="${target#../../}"
+          normalized="${normalized#../}"
+          resolved="$CLAUDE_DIR/$normalized"
+          if [ -d "$resolved" ]; then
+            mkdir -p "$dest/$skill_name"
+            rsync -a --exclude='.git' "$resolved/" "$dest/$skill_name/" 2>/dev/null || \
+              cp -r "$resolved/" "$dest/$skill_name/" 2>/dev/null || true
+          else
+            # Version mismatch — search plugin cache for the skill dir by name
+            found=$(find "$CLAUDE_DIR/plugins/cache" -type d -name "$skill_name" 2>/dev/null | head -1)
+            if [ -n "$found" ]; then
+              mkdir -p "$dest/$skill_name"
+              rsync -a --exclude='.git' "$found/" "$dest/$skill_name/" 2>/dev/null || \
+                cp -r "$found/" "$dest/$skill_name/" 2>/dev/null || true
+            fi
+          fi
         fi
-      done
+      done < <(ls "$src")
     fi
 
-    # Copy agent files — follow symlinks (handles plugin-installed agents)
+    # Copy agent files — dereference symlinks including broken relative paths
     if [ "$dir" = "agents" ]; then
       for agent_file in "$src"/*.md; do
-        # -f follows symlinks; skip only broken symlinks (where -f returns false)
+        name=$(basename "$agent_file")
         if [ -f "$agent_file" ]; then
-          cp -L "$agent_file" "$dest/"
+          # Valid file or resolvable symlink — copy directly
+          cp -L "$agent_file" "$dest/$name"
+        elif [ -L "$agent_file" ]; then
+          # Broken symlink — try resolving relative to ~/.claude instead
+          target=$(readlink "$agent_file")
+          # Strip any number of leading ../ segments and resolve from ~/.claude
+          normalized="${target#../../}"
+          normalized="${normalized#../}"
+          resolved="$CLAUDE_DIR/$normalized"
+          if [ -f "$resolved" ]; then
+            cp "$resolved" "$dest/$name"
+          else
+            # Version mismatch — search plugin cache for the file by name
+            found=$(find "$CLAUDE_DIR/plugins/cache" -name "$name" -type f 2>/dev/null | head -1)
+            if [ -n "$found" ]; then
+              cp "$found" "$dest/$name"
+            fi
+          fi
         fi
       done
     fi
