@@ -17,7 +17,12 @@ A shareable Claude Code configuration with workflow rules, 32 skills, 37 agents,
 
 ## Installation
 
+> **Warning:** Cloning into `~/.claude/` will overwrite any existing Claude Code config. Back up your existing `~/.claude/` first, or cherry-pick only what you need (see below).
+
 ```bash
+# Back up existing config (optional but recommended)
+cp -r ~/.claude/ ~/.claude.bak/
+
 # Clone into your .claude directory
 git clone https://github.com/markj81/claude-environment.git ~/.claude
 ```
