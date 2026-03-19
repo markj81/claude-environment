@@ -6,11 +6,14 @@ A shareable Claude Code configuration with workflow rules, 32 skills, 37 agents,
 - Opinionated workflow rules (plan-first, verify before done, autonomous bug fixing)
 - Skills for UI/UX, accessibility, mobile, frontend, agent teams, and more
 - Agents for code quality, architecture, GSD workflow, and multi-agent team coordination
+- Hook scripts including auto-sync and GSD integration
 - 13 Claude Code plugins pre-enabled
 
 ## Prerequisites
 
-[Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed and authenticated.
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed and authenticated
+- Node.js (for hook scripts)
+- Optional: [GSD](https://www.npmjs.com/package/get-shit-done-cc) for the planning/execution workflow (`npm install -g get-shit-done-cc`)
 
 ## Installation
 
@@ -33,17 +36,18 @@ Then create `~/.claude/settings.local.json` with your machine-specific permissio
 }
 ```
 
-> **Heads up:** `settings.json` references hook scripts (`hooks/gsd-check-update.js`, `hooks/sync-environment.sh`, `hooks/gsd-context-monitor.js`, `hooks/gsd-statusline.js`) that are part of the GSD workflow and not included here. If you don't have them, remove the `hooks` and `statusLine` entries from `settings.json`.
+If you're not using GSD, remove the `hooks` and `statusLine` entries from `settings.json`.
 
 ## Structure
 
 ```
 ~/.claude/
-├── CLAUDE.md          # Workflow rules loaded into every session
-├── settings.json      # Model, plugins, hooks, env vars
-├── settings.local.json  # Your machine-specific permissions (not committed)
-├── skills/            # 32 slash-command skills
-└── agents/            # 37 subagent definitions
+├── CLAUDE.md              # Workflow rules loaded into every session
+├── settings.json          # Model, plugins, hooks, env vars
+├── settings.local.json    # Your machine-specific permissions (not committed)
+├── hooks/                 # Session hooks (GSD integration + auto-sync)
+├── skills/                # 32 slash-command skills
+└── agents/                # 37 subagent definitions
 ```
 
 ## CLAUDE.md — Workflow Rules
@@ -87,7 +91,20 @@ Custom subagents Claude can spawn to handle specialized tasks.
 
 ### GSD Workflow Agents
 
-GSD ("Get Shit Done") is a structured planning and execution workflow. The 11 GSD agents handle the full cycle: roadmap → research → plan → execute → verify → debug. They are invoked automatically by GSD slash commands — you don't call them directly.
+GSD ("Get Shit Done") is a structured planning and execution workflow (`npm install -g get-shit-done-cc`). The 11 GSD agents handle the full cycle: roadmap → research → plan → execute → verify → debug. They are invoked automatically by GSD slash commands — you don't call them directly.
+
+## Hooks
+
+Four hook scripts in `hooks/` wire Claude Code sessions to GSD and keep the repo in sync:
+
+| Hook | Trigger | Purpose |
+|------|---------|---------|
+| `sync-environment.sh` | SessionStart | Auto-commits and pushes any local changes to this repo |
+| `gsd-check-update.js` | SessionStart | Checks npm for a newer GSD version in the background |
+| `gsd-context-monitor.js` | PostToolUse | Monitors context window usage for GSD state management |
+| `gsd-statusline.js` | StatusLine | Shows GSD project/phase info in the Claude Code status bar |
+
+The auto-sync hook (`sync-environment.sh`) is what keeps the repo up to date automatically — it runs silently on session start and only commits if something changed. If you fork this repo, update the `REMOTE` variable in that file to point to your fork.
 
 ## Plugins (13)
 
