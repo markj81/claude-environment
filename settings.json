@@ -57,5 +57,6 @@
     "ui-design@claude-code-workflows": true,
     "seo-analysis-monitoring@claude-code-workflows": true
   },
+  "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true
 }
