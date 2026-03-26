@@ -69,7 +69,16 @@
     "full-stack-orchestration@claude-code-workflows": true,
     "ui-design@claude-code-workflows": true,
     "seo-analysis-monitoring@claude-code-workflows": true,
-    "figma@claude-plugins-official": true
+    "figma@claude-plugins-official": true,
+    "figma-build-from-url@figma-mcp-skills": true
+  },
+  "extraKnownMarketplaces": {
+    "figma-mcp-skills": {
+      "source": {
+        "source": "github",
+        "repo": "markj81/figma-mcp-skills"
+      }
+    }
   },
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true
