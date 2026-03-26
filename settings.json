@@ -29,14 +29,14 @@
     ],
     "PostToolUse": [
       {
+        "matcher": "Bash|Edit|Write|MultiEdit|Agent|Task",
         "hooks": [
           {
             "type": "command",
             "command": "node \"~/.claude/hooks/gsd-context-monitor.js\"",
             "timeout": 10
           }
-        ],
-        "matcher": "Bash|Edit|Write|MultiEdit|Agent|Task"
+        ]
       }
     ],
     "PreToolUse": [
@@ -69,7 +69,8 @@
     "frontend-mobile-development@claude-code-workflows": true,
     "full-stack-orchestration@claude-code-workflows": true,
     "ui-design@claude-code-workflows": true,
-    "seo-analysis-monitoring@claude-code-workflows": true
+    "seo-analysis-monitoring@claude-code-workflows": true,
+    "figma@claude-plugins-official": true
   },
   "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true
