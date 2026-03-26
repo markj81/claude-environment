@@ -7,7 +7,7 @@
       "mcp__pencil"
     ]
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "hooks": {
     "SessionStart": [
       {
