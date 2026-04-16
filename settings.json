@@ -70,7 +70,8 @@
     "ui-design@claude-code-workflows": true,
     "seo-analysis-monitoring@claude-code-workflows": true,
     "figma@claude-plugins-official": true,
-    "figma-build-from-url@figma-mcp-skills": true
+    "figma-build-from-url@figma-mcp-skills": true,
+    "vercel@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "figma-mcp-skills": {
@@ -81,6 +82,5 @@
     }
   },
   "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
-  "model": "opus[1m]"
+  "skipDangerousModePermissionPrompt": true
 }
