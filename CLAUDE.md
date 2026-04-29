@@ -54,3 +54,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ** Simplicity First **: Make every change as simple as possible. Impact minimal code.
 - ** No Laziness **: Find root causes. No temporary fixes. Senior developer standards.
 - ** Minimal Impact **: Changes should only touch what's necessary. Avoid introducing bugs
+# graphify
+- **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
