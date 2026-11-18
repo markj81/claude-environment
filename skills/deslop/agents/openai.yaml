@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deslop"
+  short_description: "Rewrite prose that reads as machine-written"
+  default_prompt: "Use $deslop to find the AI-writing tells in this draft and rewrite it in the writer's own voice."
